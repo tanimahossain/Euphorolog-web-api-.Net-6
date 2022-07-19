@@ -11,7 +11,7 @@ namespace Euphorolog.Controllers
                 new Stories
                 {
                     storyId = "tanima-1",
-                    storyNo = 1,
+                    storyNo = 1,  
                     storyTitle = "Testing Title",
                     storyDescription = "Testing Description",
                     authorName = "Tanima",
