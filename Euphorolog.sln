@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog", "Euphorolog\Euphorolog.csproj", "{533B4DD2-832E-4DA8-AA7B-AAB4047C6EA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Euphorolog", "Euphorolog\Euphorolog.csproj", "{533B4DD2-832E-4DA8-AA7B-AAB4047C6EA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.Repository", "Eupholog.Repository\Euphorolog.Repository.csproj", "{0D289BC2-4B05-4D3A-9705-81A0962CF009}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.Services", "Euphorolog.Services\Euphorolog.Services.csproj", "{8A9B5305-DA36-4A8B-A9B1-E6945D386BA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.Database", "Euphorolog.Database\Euphorolog.Database.csproj", "{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{533B4DD2-832E-4DA8-AA7B-AAB4047C6EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{533B4DD2-832E-4DA8-AA7B-AAB4047C6EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{533B4DD2-832E-4DA8-AA7B-AAB4047C6EA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D289BC2-4B05-4D3A-9705-81A0962CF009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D289BC2-4B05-4D3A-9705-81A0962CF009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D289BC2-4B05-4D3A-9705-81A0962CF009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D289BC2-4B05-4D3A-9705-81A0962CF009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A9B5305-DA36-4A8B-A9B1-E6945D386BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A9B5305-DA36-4A8B-A9B1-E6945D386BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A9B5305-DA36-4A8B-A9B1-E6945D386BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A9B5305-DA36-4A8B-A9B1-E6945D386BA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
