@@ -95,3 +95,10 @@ C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolo
 C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\AutoMapper.dll
 C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\Scrutor.dll
+C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\FluentValidation.dll
+C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+C:\Training\Taining .Net\Euphorolog dhongsho\Euphorolog-web-api-.Net-6\Euphorolog\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll

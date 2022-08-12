@@ -25,29 +25,35 @@ namespace Euphorolog.Database.Migrations
             modelBuilder.Entity("Euphorolog.Database.Models.Stories", b =>
                 {
                     b.Property<string>("storyId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("authorName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(55)");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(0);
 
                     b.Property<string>("openingLines")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("storyDescription")
                         .IsRequired()
+                        .HasMaxLength(10005)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("storyNo")
+                        .HasMaxLength(150)
                         .HasColumnType("int");
 
                     b.Property<string>("storyTitle")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime2");
@@ -62,21 +68,22 @@ namespace Euphorolog.Database.Migrations
             modelBuilder.Entity("Euphorolog.Database.Models.Users", b =>
                 {
                     b.Property<string>("userName")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(55)
+                        .HasColumnType("nvarchar(55)");
 
                     b.Property<string>("eMail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("fullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("passChangedAt")
+                    b.Property<DateTime?>("passChangedAt")
+                        .IsRequired()
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("passChangedflag")
-                        .HasColumnType("bit");
 
                     b.Property<string>("password")
                         .IsRequired()
@@ -92,18 +99,21 @@ namespace Euphorolog.Database.Migrations
 
                     b.HasKey("userName");
 
+                    b.HasIndex("userName")
+                        .IsUnique();
+
                     b.ToTable("users");
                 });
 
             modelBuilder.Entity("Euphorolog.Database.Models.Stories", b =>
                 {
-                    b.HasOne("Euphorolog.Database.Models.Users", "Users")
+                    b.HasOne("Euphorolog.Database.Models.Users", "users")
                         .WithMany("stories")
                         .HasForeignKey("authorName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Users");
+                    b.Navigation("users");
                 });
 
             modelBuilder.Entity("Euphorolog.Database.Models.Users", b =>

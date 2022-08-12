@@ -26,68 +26,52 @@ namespace Euphorolog.Repository.Repositories
             }
             return false;
         }
+        public async Task<DateTime> GetPasswordChangedAtAsync(string id)
+        {
+            var ret = await _context.users.FirstOrDefaultAsync(s => s.userName == id);
+            if (ret.passChangedAt == null)
+            {
+               return DateTime.UtcNow;
+            }
+            return (DateTime)ret.passChangedAt;
+        }
 
         public async Task<List<Users>> GetAllUsersAsync()
         {
-            var ret = await _context.users.ToListAsync();
-            return ret;
+            return await _context.users.ToListAsync();
 
         }
-        public async Task<Users> GetUserByIdAsync(string id)
+        public async Task<Users?> GetUserByIdAsync(string id)
         {
-            var ret = await _context.users.FirstOrDefaultAsync(s => s.userName == id);
-            if (ret == null)
-            {
-                throw new FileNotFoundException(@"No Such User!");
-            }
-            return ret;
+            return await _context.users.FirstOrDefaultAsync(s => s.userName == id);
 
         }
         public async Task<Users> SignUp(Users user)
         {
-            try
-            {
-                _context.users.Add(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception err)
-            {
-                throw err;
-            }
+            _context.users.Add(user);
+            await _context.SaveChangesAsync();
             return user;
         }
         public async Task<List<Users>> CreateUserAsync(Users user)
         {
-            try
-            {
-                _context.users.Add(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception err)
-            {
-                throw err;
-            }
+            _context.users.Add(user);
+            await _context.SaveChangesAsync();
             var ret = await _context.users.ToListAsync();
             return ret;
         }
         public async Task<List<Users>> DeleteUserAsync(string id)
         {
             var ret = await _context.users.FirstOrDefaultAsync(s => s.userName == id);
-            if (ret == null)
+            if (ret != null)
             {
-                throw new FileNotFoundException(@"No Such Story!");
+                _context.users.Remove(ret);
             }
-            _context.users.Remove(ret);
             await _context.SaveChangesAsync();
             return await _context.users.ToListAsync();
         }
         public async Task<Users> UpdateUserAsync(string id, Users user)
         {
             var ret = await _context.users.FirstOrDefaultAsync(s => s.userName == id);
-            if (ret == null)
-            {
-                throw new FileNotFoundException(@"No Such User!");
-            }
             if (user == null)
             {
                 return ret;
@@ -100,7 +84,6 @@ namespace Euphorolog.Repository.Repositories
             {
                 ret.password = user.password;
                 ret.passChangedAt = DateTime.UtcNow;
-                ret.passChangedflag = true;
             }
             await _context.SaveChangesAsync();
             return ret;

@@ -1,5 +1,5 @@
 ﻿using Euphorolog.Database.Models;
-using Euphorolog.Services.DTOs;
+using Euphorolog.Services.DTOs.AuthDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Euphorolog.Services.Contracts
 {
     public interface IAuthService
     {
-        Task<Users> SignUp(Users user);
-        Task<LogInOutputDTO> LogIn(LogInInputDTO user);
+        Task<SignUpResponseDTO> SignUp(SignUpRequestDTO user);
+        Task<LogInResponseDTO> LogIn(LogInRequestDTO user);
     }
 }

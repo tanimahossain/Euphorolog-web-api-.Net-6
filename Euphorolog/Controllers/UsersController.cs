@@ -1,5 +1,7 @@
 ﻿using Euphorolog.Database.Models;
+using Euphorolog.Services.DTOs.UsersDTOs;
 using Euphorolog.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,27 +17,27 @@ namespace Euphorolog.Controllers
             _usersService = storiesService;
         }
         [HttpGet]
-        public async Task<ActionResult<List<Users>>> GetAsync()
+        public async Task<ActionResult<List<UserInfoResponseDTO>>> GetAllUsersAsync()
         {
             return Ok(await _usersService.GetAllUsersAsync());
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Users>> GetAsync(string id)
+        public async Task<ActionResult<UserInfoResponseDTO>> GetUserByIdAsync(string id)
         {
             return Ok(await _usersService.GetUserByIdAsync(id));
         }
-        [HttpPost]
-        public async Task<ActionResult<List<Users>>> CreateUsersAsync(Users user)
-        {
-            return Ok(await _usersService.CreateUserAsync(user));
-        }
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Users>> Put([FromRoute] string id, [FromBody] Users user)
+        //[HttpPost]
+        //public async Task<ActionResult<List<Users>>> CreateUsersAsync(Users user)
+        //{
+        //    return Ok(await _usersService.CreateUserAsync(user));
+        //}
+        [HttpPut("{id}"),Authorize]
+        public async Task<ActionResult<UpdateUserInfoResponseDTO>> UpdateUserAsync([FromRoute] string id, [FromBody] UpdateUserInfoRequestDTO user)
         {
             return Ok(await _usersService.UpdateUserAsync(id, user));
         }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Users>>> DeleteStoryAsync(string id)
+        [HttpDelete("{id}"),Authorize]
+        public async Task<ActionResult<List<UserInfoResponseDTO>>> DeleteStoryAsync(string id)
         {
             return Ok(await _usersService.DeleteUserAsync(id));
         }

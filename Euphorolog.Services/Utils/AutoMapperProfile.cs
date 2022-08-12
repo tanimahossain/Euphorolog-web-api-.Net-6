@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Euphorolog.Database.Models;
 using Euphorolog.Services.DTOs;
+using Euphorolog.Services.DTOs.AuthDTOs;
+using Euphorolog.Services.DTOs.StoriesDTOs;
+using Euphorolog.Services.DTOs.UsersDTOs;
 
 namespace Euphorolog.Services.Utils
 {
@@ -13,8 +16,20 @@ namespace Euphorolog.Services.Utils
     {
         public AutoMapperProfile()
         {
-            //CreateMap<StoriesDTO, Stories>();
-            CreateMap<Stories, StoriesDTO>();
+            //Stories Mappers
+            CreateMap<Stories, GetAllStoriesResponseDTO>();
+            CreateMap<Stories, GetStoryByIdResponseDTO>();
+            CreateMap<PostStoryRequestDTO, Stories>();
+            CreateMap<UpdateStoryRequestDTO, Stories>();
+
+            //Authentication Mappers
+            CreateMap<SignUpRequestDTO, Users>();
+            CreateMap<Users, SignUpResponseDTO>();
+
+            //User Mappers
+            CreateMap<Users, UserInfoResponseDTO>();
+            CreateMap<UpdateUserInfoRequestDTO, Users>();
+            CreateMap<Users, UpdateUserInfoResponseDTO>();
         }
     }
 }

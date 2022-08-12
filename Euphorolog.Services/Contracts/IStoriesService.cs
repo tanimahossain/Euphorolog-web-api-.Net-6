@@ -1,6 +1,6 @@
 ﻿//using Euphorolog.Database.Models;
 using Euphorolog.Database.Models;
-using Euphorolog.Services.DTOs;
+using Euphorolog.Services.DTOs.StoriesDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +11,11 @@ namespace Euphorolog.Services.Services
 {
     public interface IStoriesService
     {
-        Task<List<Stories>> GetAllStoriesAsync();
-        Task<StoriesDTO> GetStoryByIdAsync(string id);
-        Task<List<Stories>> PostStoryAsync(Stories story);
-        Task<List<Stories>> DeleteStoryAsync(string id);
-        Task<Stories> UpdateStoryAsync(string id, Stories story);
+        Task<List<GetAllStoriesResponseDTO>> GetAllStoriesAsync(int pageNumber, int pageSize);
+        Task<GetStoryByIdResponseDTO> GetStoryByIdAsync(string id);
+        Task<GetStoryByIdResponseDTO> PostStoryAsync(PostStoryRequestDTO story);
+        Task<List<GetAllStoriesResponseDTO>> DeleteStoryAsync(string id);
+        Task<GetStoryByIdResponseDTO> UpdateStoryAsync(string id, UpdateStoryRequestDTO story);
+        Task<int> TotalStoryNoAsync();
     }
 }

@@ -10,8 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Euphorolog.Services.Utils;
 using System.Runtime.Serialization;
-using Euphorolog.Services.DTOs;
 using Microsoft.Extensions.Configuration;
+using Euphorolog.Services.DTOs.AuthDTOs;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Euphorolog.Services.CustomExceptions;
+using FluentValidation;
+using Euphorolog.Services.DTOValidators;
 
 namespace Euphorolog.Services.Services
 {
@@ -20,41 +25,58 @@ namespace Euphorolog.Services.Services
         public readonly EuphorologContext _context;
         public readonly IUsersRepository _usersRepository;
         public readonly IConfiguration _configuration;
-        public AuthService(EuphorologContext context, IUsersRepository usersRepository,IConfiguration configuration)
+        public readonly IHttpContextAccessor _httpContextAccessor;
+        public readonly IMapper _mapper;
+        public readonly MainDTOValidator<LogInRequestDTO> _validator;
+        public AuthService(
+            EuphorologContext context,
+            IUsersRepository usersRepository,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor,
+            IMapper mapper,
+            MainDTOValidator<LogInRequestDTO> validator
+        )
         {
             _context = context;
             _usersRepository = usersRepository;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
+            _validator = validator;
         }
 
-        public async Task<Users> SignUp(Users user)
+        public async Task<SignUpResponseDTO> SignUp(SignUpRequestDTO req)
         {
-            if (await _usersRepository.UserExists(user.userName))
+            if (await _usersRepository.UserExists(req.userName))
             {
-                throw new Exception("User already exists!");
+                throw new BadRequestException("User already exists!");
             }
-            var _utils = new Utilities(_configuration);
+            var user = _mapper.Map<Users>(req);
+            var _utils = new Utilities(_configuration, _httpContextAccessor);
             _utils.CreatePasswordHash(user.password, out byte[] passwordHash, out byte[] passwordSalt);
             user.passwordHash = passwordHash;
             user.passwordSalt = passwordSalt;
             user.passChangedAt = DateTime.UtcNow;
-            user.passChangedflag = true;
-            return await _usersRepository.SignUp(user);
+            var userInfo = await _usersRepository.SignUp(user);
+            var ret = _mapper.Map<SignUpResponseDTO>(userInfo);
+            ret.token = _utils.CreateJWTToken(userInfo);
+            return ret;
         }
 
-        public async Task<LogInOutputDTO> LogIn(LogInInputDTO user)
+        public async Task<LogInResponseDTO> LogIn(LogInRequestDTO user)
         {
+            _validator.ValidateDTO(user);
             var userInfo = await _usersRepository.GetUserByIdAsync(user.userName);
             if(userInfo == null)
             {
-                throw new Exception("User doesn't exist!");
+                throw new NotFoundException("User doesn't exist!");
             }
-            var _utils = new Utilities(_configuration);
+            var _utils = new Utilities(_configuration,_httpContextAccessor);
             if(!_utils.VerifyPasswordHash(user.password, userInfo.passwordHash, userInfo.passwordSalt))
             {
-                throw new Exception("username or password wrong!");
+                throw new BadRequestException("username or password wrong!");
             }
-            var sendInfo = new LogInOutputDTO();
+            var sendInfo = new LogInResponseDTO();
             sendInfo.userName = user.userName;
             sendInfo.token = _utils.CreateJWTToken(userInfo);
             return sendInfo;
