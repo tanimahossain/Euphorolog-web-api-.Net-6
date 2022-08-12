@@ -9,15 +9,19 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Euphorolog.Services.Contracts;
+using Microsoft.AspNetCore.Http;
 
 namespace Euphorolog.Services.Utils
 {
     public class Utilities
     {
         public readonly IConfiguration _configuration;
-        public Utilities(IConfiguration configuration)
+        public readonly IHttpContextAccessor _httpContextAccessor;
+        public static int TokenValidTimeSpan = 10;
+        public Utilities(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration =  configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -38,8 +42,9 @@ namespace Euphorolog.Services.Utils
         public string CreateJWTToken(Users user)
         {
             List<Claim> claims = new List<Claim> {
-                new Claim(ClaimTypes.NameIdentifier, user.userName.ToString()),
-                new Claim(ClaimTypes.Name, user.fullName)
+                new Claim(ClaimTypes.NameIdentifier, user.userName.ToLower()),
+                new Claim(ClaimTypes.Name, user.userName.ToLower().ToString()),
+                new Claim(ClaimTypes.Expiration, DateTime.UtcNow.AddDays(TokenValidTimeSpan).AddSeconds(1).ToString())
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
@@ -47,17 +52,27 @@ namespace Euphorolog.Services.Utils
 
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(TokenValidTimeSpan).AddSeconds(5),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public bool tokenStillValid(DateTime passwordChangedAt)
+        {
+            var tokenExpirationString = _httpContextAccessor.HttpContext.User?.FindFirst(ClaimTypes.Expiration)?.Value;
+            if (tokenExpirationString == null)
             {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
+                return false;
+            }
+            DateTime tokenExpiration = Convert.ToDateTime(tokenExpirationString);
+            DateTime passwordTimeExpiration = passwordChangedAt.AddDays(TokenValidTimeSpan);
+            if (DateTime.Compare(tokenExpiration, passwordTimeExpiration) < 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

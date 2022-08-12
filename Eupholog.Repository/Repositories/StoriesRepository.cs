@@ -17,54 +17,52 @@ namespace Euphorolog.Repository.Repositories
         {
             _context = context;
         }
-
-        public async Task<List<Stories>> GetAllStoriesAsync()
+        public async Task<int> TotalStoryNoAsync()
         {
-            var ret = await _context.stories.ToListAsync();
+            var ret = await _context.stories.CountAsync();
+            return ret;
+        }
+
+        public async Task<List<Stories>> GetAllStoriesAsync(int pageNumber, int pageSize)
+        {
+            var ret = await _context.stories
+                .OrderByDescending(s=>s.createdAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).ToListAsync();
             return ret;
 
         }
-        public async Task<Stories> GetStoryByIdAsync(string id)
+        public async Task<Stories?> GetStoryByIdAsync(string id)
         {
             var ret = await _context.stories.FirstOrDefaultAsync(s => s.storyId == id);
-            if (ret == null){
-                throw new FileNotFoundException(@"No Such Story!");
-            }
             return ret;
 
         }
-        public async Task<List<Stories>> PostStoryAsync(Stories story)
+
+        public async Task<int> MaxStoryNoByUserId(string id)
         {
-            try
-            {
-                _context.stories.Add(story);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception err)
-            {
-                throw err;
-            }
-            var ret = await _context.stories.ToListAsync();
-            return ret;
+            int? mx = await _context.stories.MaxAsync(s => s.authorName == id ? s.storyNo : 0);
+            if (mx == null)
+                mx = 0;
+            return (int)mx;
+        }
+        public async Task<Stories> PostStoryAsync(Stories story)
+        {
+            _context.stories.Add(story);
+            await _context.SaveChangesAsync();
+            return story;
         }
         public async Task<List<Stories>> DeleteStoryAsync(string id)
         {
             var ret = await _context.stories.FirstOrDefaultAsync(s => s.storyId == id);
-            if (ret == null)
-            {
-                throw new FileNotFoundException(@"No Such Story!");
-            }
-            _context.stories.Remove(ret);
+            if(ret != null)
+                _context.stories.Remove(ret);
             await _context.SaveChangesAsync();
-            return await _context.stories.ToListAsync();
+            return await _context.stories.OrderByDescending(s => s.createdAt).ToListAsync();
         }
         public async Task<Stories> UpdateStoryAsync(string id, Stories story)
         {
             var ret = await _context.stories.FirstOrDefaultAsync(s => s.storyId == id);
-            if (ret == null)
-            {
-                throw new FileNotFoundException(@"No Such Story!");
-            }
             if(story == null)
             {
                 return ret;
@@ -77,6 +75,7 @@ namespace Euphorolog.Repository.Repositories
             if (story.storyDescription != null)
             {
                 ret.storyDescription = story.storyDescription;
+                ret.openingLines = story.openingLines;
                 ret.updatedAt = DateTime.UtcNow;
             }
             await _context.SaveChangesAsync();

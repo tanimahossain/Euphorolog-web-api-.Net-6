@@ -9,11 +9,13 @@ namespace Euphorolog.Repository.Contracts
 {
     public interface IStoriesRepository
     {
-        Task<List<Stories>> GetAllStoriesAsync();
+        Task<List<Stories>> GetAllStoriesAsync(int pageNumber, int pageSize);
 
-        Task<Stories> GetStoryByIdAsync(string id);
-        Task<List<Stories>> PostStoryAsync(Stories story);
+        Task<Stories?> GetStoryByIdAsync(string id);
+        Task<int>MaxStoryNoByUserId(string id);
+        Task<Stories> PostStoryAsync(Stories story);
         Task<List<Stories>> DeleteStoryAsync(string id);
         Task<Stories> UpdateStoryAsync(string id, Stories story);
+        Task<int> TotalStoryNoAsync();
     }
 }

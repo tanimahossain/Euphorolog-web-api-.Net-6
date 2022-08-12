@@ -10,7 +10,6 @@ namespace Euphorolog.Database.Models
 {
     public class Users
     {
-        [Key, Required]
         public string userName { get; set; }
         public string fullName { get; set; }
         public string eMail { get; set; }
@@ -18,7 +17,6 @@ namespace Euphorolog.Database.Models
         public byte[]? passwordHash { get; set; }
         public byte[]? passwordSalt { get; set; }
         public DateTime? passChangedAt { get; set; }
-        public bool? passChangedflag { get; set; }
         public ICollection<Stories>? stories { get; set; }
     }
 }

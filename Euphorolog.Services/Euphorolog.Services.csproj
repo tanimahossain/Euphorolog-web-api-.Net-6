@@ -9,10 +9,17 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Eupholog.Repository\Euphorolog.Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOValidators\UsersDTOValidators\" />
+    <Folder Include="DTOValidators\StoriesDTOValidators\" />
   </ItemGroup>
 
 </Project>
