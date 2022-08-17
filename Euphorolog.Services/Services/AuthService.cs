@@ -29,14 +29,16 @@ namespace Euphorolog.Services.Services
         public readonly IConfiguration _configuration;
         public readonly IHttpContextAccessor _httpContextAccessor;
         public readonly IMapper _mapper;
-        public readonly MainDTOValidator<LogInRequestDTO> _validator;
+        public readonly MainDTOValidator<LogInRequestDTO> _logInValidator;
+        public readonly MainDTOValidator<SignUpRequestDTO> _signUpValidator;
         public AuthService(
             EuphorologContext context,
             IUsersRepository usersRepository,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor,
             IMapper mapper,
-            MainDTOValidator<LogInRequestDTO> validator
+            MainDTOValidator<LogInRequestDTO> logInValidator,
+            MainDTOValidator<SignUpRequestDTO> signUpValidator
         )
         {
             _context = context;
@@ -44,11 +46,13 @@ namespace Euphorolog.Services.Services
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
-            _validator = validator;
+            _logInValidator = logInValidator;
+            _signUpValidator = signUpValidator;
         }
 
         public async Task<SignUpResponseDTO> SignUp(SignUpRequestDTO req)
         {
+            _signUpValidator.ValidateDTO(req);
             if (await _usersRepository.UserExists(req.userName))
             {
                 throw new BadRequestException("User already exists!");
@@ -71,7 +75,7 @@ namespace Euphorolog.Services.Services
 
         public async Task<LogInResponseDTO> LogIn(LogInRequestDTO user)
         {
-            _validator.ValidateDTO(user);
+            _logInValidator.ValidateDTO(user);
             var userInfo = await _usersRepository.GetUserByIdAsync(user.userName);
             if (userInfo == null)
             {
