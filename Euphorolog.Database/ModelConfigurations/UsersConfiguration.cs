@@ -34,7 +34,7 @@ namespace Euphorolog.Database.ModelConfigurations
                 .IsRequired()
                 .HasMaxLength(400);
             builder
-                .HasIndex(u => u.userName)
+                .HasIndex(u => u.eMail)
                 .IsUnique();
             //passwordHash
             builder

@@ -13,6 +13,7 @@
         {
             this.pageNumber = pageNumber < 1 ? 1 : pageNumber;
             this.pageSize = pageSize > 10 ? 10 : pageSize;
+            this.pageSize = pageSize < 1 ? 1 : this.pageSize;
         }
     }
 }

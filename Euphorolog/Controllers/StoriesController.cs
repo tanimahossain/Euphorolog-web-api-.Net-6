@@ -44,17 +44,33 @@ namespace Euphorolog.Controllers
         [HttpPost,Authorize]
         public async Task<ActionResult<GetStoryByIdResponseDTO>> PostStoryAsync(PostStoryRequestDTO story)
         {
-            return Ok(await _storiesService.PostStoryAsync(story));
+            var ret = await _storiesService.PostStoryAsync(story);
+            return Ok(new StoryResponse<GetStoryByIdResponseDTO>(ret));
         }
         [HttpPut("{id}"),Authorize]
         public async Task<ActionResult<GetStoryByIdResponseDTO>> Put([FromRoute] string id, [FromBody] UpdateStoryRequestDTO story)
         {
-            return Ok(await _storiesService.UpdateStoryAsync(id, story));
+            var ret = await _storiesService.UpdateStoryAsync(id, story);
+            return Ok(new StoryResponse<GetStoryByIdResponseDTO>(ret));
         }
         [HttpDelete("{id}"),Authorize]
-        public async Task<ActionResult<List<GetAllStoriesResponseDTO>>> DeleteStoryAsync(string id)
+        public async Task<ActionResult<PagedResponse<List<GetAllStoriesResponseDTO>>>> DeleteStoryAsync(string id)
         {
-            return Ok(await _storiesService.DeleteStoryAsync(id));
+            await _storiesService.DeleteStoryAsync(id);
+
+            var route = Request.Path.Value;
+            var validFilter = new PaginationFilter(1, 10);
+            var pagedData = await _storiesService.GetAllStoriesAsync(1, 10);
+            var totalRecords = await _storiesService.TotalStoryNoAsync();
+            var pagedReponse = PaginationHelper.CreatePagedReponse<GetAllStoriesResponseDTO>(pagedData, validFilter, totalRecords, _uriService, route);
+            return Ok(pagedReponse);
+        }
+        /// the only path content negotiation is applied
+        [HttpGet("{id}/download")]
+        public async Task<ActionResult<GetStoryByIdResponseDTO>> GetStoryByIdDownloadAsync(string id)
+        {
+            var ret = await _storiesService.GetStoryByIdAsync(id);
+            return Ok(ret);
         }
     }
 }

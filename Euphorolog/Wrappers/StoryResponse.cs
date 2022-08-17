@@ -7,7 +7,6 @@
         }
         public StoryResponse(T data): base(data)
         {
-
         }
     }
 }

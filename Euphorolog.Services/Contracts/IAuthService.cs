@@ -12,5 +12,6 @@ namespace Euphorolog.Services.Contracts
     {
         Task<SignUpResponseDTO> SignUp(SignUpRequestDTO user);
         Task<LogInResponseDTO> LogIn(LogInRequestDTO user);
+        Task<LogInResponseDTO> Verify();
     }
 }

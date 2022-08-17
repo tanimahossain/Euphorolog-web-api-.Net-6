@@ -13,7 +13,7 @@ namespace Euphorolog.Services.Services
     {
         Task<List<UserInfoResponseDTO>> GetAllUsersAsync();
         Task<UserInfoResponseDTO> GetUserByIdAsync(string id);
-        Task<List<UserInfoResponseDTO>> DeleteUserAsync(string id);
+        Task DeleteUserAsync(string id);
         Task<UpdateUserInfoResponseDTO> UpdateUserAsync(string id, UpdateUserInfoRequestDTO user);
     }
 }

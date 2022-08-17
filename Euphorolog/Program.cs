@@ -27,7 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 //Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
 builder.Services.AddDbContext<EuphorologContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//AddFluentValidationClientsideAdapters
+
 builder.Services.AddControllers(config =>
 {
     config.RespectBrowserAcceptHeader = true;

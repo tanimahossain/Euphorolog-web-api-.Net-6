@@ -2,6 +2,7 @@
 using Euphorolog.Services.Contracts;
 using Euphorolog.Services.DTOs.AuthDTOs;
 using Euphorolog.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,18 +18,22 @@ namespace Euphorolog.Controllers
             _authService = authService;
         }
         [HttpPost("SignUp")]
-        public async Task<ActionResult<Response<SignUpResponseDTO>>> SignUp(SignUpRequestDTO user)
+        public async Task<ActionResult<AuthResponse<SignUpResponseDTO>>> SignUp(SignUpRequestDTO user)
         {
             var response = await _authService.SignUp(user);
-            return Ok(new Response<SignUpResponseDTO>(response));
+            return Ok(new AuthResponse<SignUpResponseDTO>(response));
         }
         [HttpPost("LogIn")]
-        public async Task<ActionResult<Response<LogInResponseDTO>>> LogIn(LogInRequestDTO user)
+        public async Task<ActionResult<AuthResponse<LogInResponseDTO>>> LogIn(LogInRequestDTO user)
         {
             var response = await _authService.LogIn(user);
-            //var presponse = new Response<LogInResponseDTO>(response);
-            //return Ok(p);
-            return Ok(new Response<LogInResponseDTO>(response));
+            return Ok(new AuthResponse<LogInResponseDTO>(response));
+        }
+        [HttpPost("verify"),Authorize]
+        public async Task<ActionResult<AuthResponse<LogInResponseDTO>>> Verify()
+        {
+            var response = await _authService.Verify();
+            return Ok(new AuthResponse<LogInResponseDTO>(response));
         }
     }
 }

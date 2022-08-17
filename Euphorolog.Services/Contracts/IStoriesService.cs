@@ -14,7 +14,7 @@ namespace Euphorolog.Services.Services
         Task<List<GetAllStoriesResponseDTO>> GetAllStoriesAsync(int pageNumber, int pageSize);
         Task<GetStoryByIdResponseDTO> GetStoryByIdAsync(string id);
         Task<GetStoryByIdResponseDTO> PostStoryAsync(PostStoryRequestDTO story);
-        Task<List<GetAllStoriesResponseDTO>> DeleteStoryAsync(string id);
+        Task DeleteStoryAsync(string id);
         Task<GetStoryByIdResponseDTO> UpdateStoryAsync(string id, UpdateStoryRequestDTO story);
         Task<int> TotalStoryNoAsync();
     }
