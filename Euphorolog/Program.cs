@@ -46,6 +46,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<MainDTOValidator<LogInRequestDTO>, LogInRequestDTOValidator>();
+builder.Services.AddScoped<MainDTOValidator<SignUpRequestDTO>, SignUpRequestDTOValidator>();
 builder.Services.AddScoped<IStoriesService, StoriesService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
