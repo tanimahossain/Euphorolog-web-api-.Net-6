@@ -13,9 +13,10 @@ namespace Euphorolog.Repository.Contracts
         Task<Users?> GetUserByIdAsync(string id);
         Task<Users> SignUp(Users user);
         Task<List<Users>> CreateUserAsync(Users user);
-        Task<List<Users>> DeleteUserAsync(string id);
+        Task DeleteUserAsync(string id);
         Task<Users> UpdateUserAsync(string id, Users user);
         Task<bool> UserExists(string id);
+        Task<bool> EmailUsed(string id);
         Task<DateTime> GetPasswordChangedAtAsync(string id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Euphorolog.Database.Models;
 using Euphorolog.Services.DTOs.UsersDTOs;
 using Euphorolog.Services.Services;
+using Euphorolog.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,30 +17,33 @@ namespace Euphorolog.Controllers
         {
             _usersService = storiesService;
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<UserInfoResponseDTO>>> GetAllUsersAsync()
+        public async Task<ActionResult<UserResponse<List<UserInfoResponseDTO>>>> GetAllUsersAsync()
         {
-            return Ok(await _usersService.GetAllUsersAsync());
+            var ret = await _usersService.GetAllUsersAsync();
+            return Ok(new UserResponse<List<UserInfoResponseDTO>>(ret));
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserInfoResponseDTO>> GetUserByIdAsync(string id)
+        public async Task<ActionResult<UserResponse<UserInfoResponseDTO>>> GetUserByIdAsync(string id)
         {
-            return Ok(await _usersService.GetUserByIdAsync(id));
+            var ret = await _usersService.GetUserByIdAsync(id);
+            return Ok(new UserResponse<UserInfoResponseDTO>(ret));
         }
-        //[HttpPost]
-        //public async Task<ActionResult<List<Users>>> CreateUsersAsync(Users user)
-        //{
-        //    return Ok(await _usersService.CreateUserAsync(user));
-        //}
+
         [HttpPut("{id}"),Authorize]
-        public async Task<ActionResult<UpdateUserInfoResponseDTO>> UpdateUserAsync([FromRoute] string id, [FromBody] UpdateUserInfoRequestDTO user)
+        public async Task<ActionResult<UserResponse<UpdateUserInfoResponseDTO>>> UpdateUserAsync([FromRoute] string id, [FromBody] UpdateUserInfoRequestDTO user)
         {
-            return Ok(await _usersService.UpdateUserAsync(id, user));
+            var ret = await _usersService.UpdateUserAsync(id, user);
+            return Ok(new UserResponse<UpdateUserInfoResponseDTO>(ret));
         }
+
         [HttpDelete("{id}"),Authorize]
-        public async Task<ActionResult<List<UserInfoResponseDTO>>> DeleteStoryAsync(string id)
+        public async Task DeleteStoryAsync(string id)
         {
-            return Ok(await _usersService.DeleteUserAsync(id));
+            await _usersService.DeleteUserAsync(id);
+            return;
         }
     }
 }

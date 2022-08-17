@@ -52,7 +52,7 @@ namespace Euphorolog.Services.Services
             return _mapper.Map<UserInfoResponseDTO>(ret);
 
         }
-        public async Task<List<UserInfoResponseDTO>> DeleteUserAsync(string id)
+        public async Task DeleteUserAsync(string id)
         {
             /*
              * If the user is logged in
@@ -90,8 +90,7 @@ namespace Euphorolog.Services.Services
 
 
             await _usersRepository.DeleteUserAsync(id);
-            var ret = await _usersRepository.GetAllUsersAsync();
-            return _mapper.Map<List<UserInfoResponseDTO>>(ret);
+            return;
         }
         public async Task<UpdateUserInfoResponseDTO> UpdateUserAsync(string id, UpdateUserInfoRequestDTO req)
         {

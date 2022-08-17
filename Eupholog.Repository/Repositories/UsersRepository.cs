@@ -20,7 +20,15 @@ namespace Euphorolog.Repository.Repositories
         }
         public async Task<bool> UserExists(string userName)
         {
-            if(await _context.users.AnyAsync(u => u.userName.ToLower() == userName.ToLower()))
+            if (await _context.users.AnyAsync(u => u.userName.ToLower() == userName.ToLower()))
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> EmailUsed(string eMail)
+        {
+            if (await _context.users.AnyAsync(u => u.eMail.ToLower() == eMail.ToLower()))
             {
                 return true;
             }
@@ -59,7 +67,7 @@ namespace Euphorolog.Repository.Repositories
             var ret = await _context.users.ToListAsync();
             return ret;
         }
-        public async Task<List<Users>> DeleteUserAsync(string id)
+        public async Task DeleteUserAsync(string id)
         {
             var ret = await _context.users.FirstOrDefaultAsync(s => s.userName == id);
             if (ret != null)
@@ -67,7 +75,7 @@ namespace Euphorolog.Repository.Repositories
                 _context.users.Remove(ret);
             }
             await _context.SaveChangesAsync();
-            return await _context.users.ToListAsync();
+            return;
         }
         public async Task<Users> UpdateUserAsync(string id, Users user)
         {

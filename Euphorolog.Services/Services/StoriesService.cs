@@ -100,7 +100,7 @@ namespace Euphorolog.Services.Services
             var ret = await _storiesRepository.PostStoryAsync(story);
             return _mapper.Map <GetStoryByIdResponseDTO>(ret);
         }
-        public async Task<List<GetAllStoriesResponseDTO>> DeleteStoryAsync(string id)
+        public async Task DeleteStoryAsync(string id)
         {
             /*
              * If the user is logged in
@@ -135,8 +135,8 @@ namespace Euphorolog.Services.Services
             {
                 throw new ForbiddenException("Not your Story!");
             }
-            var ret = await _storiesRepository.DeleteStoryAsync(id);
-            return _mapper.Map<List<GetAllStoriesResponseDTO>>(ret);
+            await _storiesRepository.DeleteStoryAsync(id);
+            return;
         }
         public async Task<GetStoryByIdResponseDTO> UpdateStoryAsync(string id, UpdateStoryRequestDTO req)
         {

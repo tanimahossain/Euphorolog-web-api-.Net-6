@@ -52,13 +52,13 @@ namespace Euphorolog.Repository.Repositories
             await _context.SaveChangesAsync();
             return story;
         }
-        public async Task<List<Stories>> DeleteStoryAsync(string id)
+        public async Task DeleteStoryAsync(string id)
         {
             var ret = await _context.stories.FirstOrDefaultAsync(s => s.storyId == id);
             if(ret != null)
                 _context.stories.Remove(ret);
             await _context.SaveChangesAsync();
-            return await _context.stories.OrderByDescending(s => s.createdAt).ToListAsync();
+            return;
         }
         public async Task<Stories> UpdateStoryAsync(string id, Stories story)
         {
