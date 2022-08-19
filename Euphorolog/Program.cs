@@ -27,7 +27,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 //Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
 builder.Services.AddDbContext<EuphorologContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Euphorolog",
+                          policy =>
+                          {
+                              policy.WithOrigins("http://localhost:3001",
+                                                  "https://localhost:3001")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                          });
+});
 builder.Services.AddControllers(config =>
 {
     config.RespectBrowserAcceptHeader = true;
@@ -97,6 +107,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.CustomErrorHandler();
 app.UseHttpsRedirection();
+app.UseCors("Euphorolog");
 app.UseAuthentication();
 app.UseAuthorization();
 
