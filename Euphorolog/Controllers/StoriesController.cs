@@ -11,7 +11,7 @@ using Euphorolog.Wrappers;
 
 namespace Euphorolog.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController] 
     public class StoriesController : ControllerBase
     {
