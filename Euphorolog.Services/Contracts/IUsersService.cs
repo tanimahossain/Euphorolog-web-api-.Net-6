@@ -1,4 +1,5 @@
 ﻿using Euphorolog.Database.Models;
+using Euphorolog.Services.DTOs.StoriesDTOs;
 using Euphorolog.Services.DTOs.UsersDTOs;
 using System;
 using System.Collections.Generic;

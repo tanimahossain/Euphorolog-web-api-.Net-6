@@ -18,7 +18,7 @@ namespace Euphorolog.Repository.Repositories
         {
             _context = context;
         }
-        public async Task<bool> UserExists(string userName)
+        public async Task<bool> CheckUserExistsAsync(string userName)
         {
             if (await _context.users.AnyAsync(u => u.userName.ToLower() == userName.ToLower()))
             {
@@ -26,7 +26,7 @@ namespace Euphorolog.Repository.Repositories
             }
             return false;
         }
-        public async Task<bool> EmailUsed(string eMail)
+        public async Task<bool> CheckEmailUsedAsync(string eMail)
         {
             if (await _context.users.AnyAsync(u => u.eMail.ToLower() == eMail.ToLower()))
             {
@@ -54,7 +54,7 @@ namespace Euphorolog.Repository.Repositories
             return await _context.users.FirstOrDefaultAsync(s => s.userName == id);
 
         }
-        public async Task<Users> SignUp(Users user)
+        public async Task<Users> SignUpAsync(Users user)
         {
             _context.users.Add(user);
             await _context.SaveChangesAsync();
@@ -88,9 +88,10 @@ namespace Euphorolog.Repository.Repositories
             {
                 ret.fullName = user.fullName;
             }
-            if (user.password != null)
+            if (user.passwordHash != null)
             {
-                ret.password = user.password;
+                ret.passwordHash = user.passwordHash;
+                ret.passwordSalt = user.passwordSalt;
                 ret.passChangedAt = DateTime.UtcNow;
             }
             await _context.SaveChangesAsync();

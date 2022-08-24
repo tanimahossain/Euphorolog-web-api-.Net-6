@@ -17,9 +17,16 @@ namespace Euphorolog.Repository.Repositories
         {
             _context = context;
         }
-        public async Task<int> TotalStoryNoAsync()
+        public async Task<int> GetTotalStoryCountAsync()
         {
             var ret = await _context.stories.CountAsync();
+            return ret;
+        }
+        public async Task<int> GetTotalStoryCountOfAUserAsync(string username)
+        {
+            var ret = await _context.stories
+                .Where(s => s.authorName==username)
+                .CountAsync();
             return ret;
         }
 
@@ -39,9 +46,19 @@ namespace Euphorolog.Repository.Repositories
 
         }
 
-        public async Task<int> MaxStoryNoByUserId(string id)
+        public async Task<List<Stories>> GetStoriesByUserIdAsync(int pageNumber, int pageSize,string username)
         {
-            int? mx = await _context.stories.MaxAsync(s => s.authorName == id ? s.storyNo : 0);
+            var ret = await _context.stories
+                .OrderByDescending(s => s.createdAt)
+                .Where(s => s.authorName == username)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).ToListAsync();
+            return ret;
+
+        }
+        public async Task<int> GetMaxStoryNoByUserId(string username)
+        {
+            int? mx = await _context.stories.MaxAsync(s => s.authorName == username ? s.storyNo : 0);
             if (mx == null)
                 mx = 0;
             return (int)mx;
@@ -75,7 +92,6 @@ namespace Euphorolog.Repository.Repositories
             if (story.storyDescription != null)
             {
                 ret.storyDescription = story.storyDescription;
-                ret.openingLines = story.openingLines;
                 ret.updatedAt = DateTime.UtcNow;
             }
             await _context.SaveChangesAsync();

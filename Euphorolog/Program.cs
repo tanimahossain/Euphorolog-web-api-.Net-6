@@ -3,24 +3,21 @@ using Euphorolog.GlobalExceptionHandler;
 using Euphorolog.Repository.Contracts;
 using Euphorolog.Repository.Repositories;
 using Euphorolog.Services.Contracts;
-using Euphorolog.Services.CustomExceptions;
 using Euphorolog.Services.Services;
 using Euphorolog.Services.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System.Net;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using static System.Net.Mime.MediaTypeNames;
 using Euphorolog.Services.DTOValidators.AuthDTOValidators;
-using System.Reflection;
 using Euphorolog.ContentNegotiation;
 using Euphorolog.Services.DTOValidators;
 using Euphorolog.Services.DTOs.AuthDTOs;
+using Euphorolog.Services.DTOValidators.StoriesDTOValidators;
+using Euphorolog.Services.DTOs.StoriesDTOs;
+using Euphorolog.Services.DTOs.UsersDTOs;
+using Euphorolog.Services.DTOValidators.UsersDTOValidators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,9 +54,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<MainDTOValidator<LogInRequestDTO>, LogInRequestDTOValidator>();
 builder.Services.AddScoped<MainDTOValidator<SignUpRequestDTO>, SignUpRequestDTOValidator>();
+builder.Services.AddScoped<MainDTOValidator<PostStoryRequestDTO>, PostStoryRequestDTOValidator>();
+builder.Services.AddScoped<MainDTOValidator<UpdateStoryRequestDTO>, UpdateStoryRequestDTOValidator>();
+builder.Services.AddScoped<MainDTOValidator<UpdateUserInfoRequestDTO>, UpdateUserInfoRequestDTOValidators>();
 builder.Services.AddScoped<IStoriesService, StoriesService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddTransient<IUtilities, Utilities>();
 builder.Services.AddSingleton<IUriService>(o =>
 {
     var accessor = o.GetRequiredService<IHttpContextAccessor>();

@@ -24,19 +24,21 @@ namespace Euphorolog.Services.Services
 {
     public class AuthService : IAuthService
     {
-        public readonly EuphorologContext _context;
-        public readonly IUsersRepository _usersRepository;
-        public readonly IConfiguration _configuration;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public readonly IMapper _mapper;
-        public readonly MainDTOValidator<LogInRequestDTO> _logInValidator;
-        public readonly MainDTOValidator<SignUpRequestDTO> _signUpValidator;
+        private readonly EuphorologContext _context;
+        private readonly IUsersRepository _usersRepository;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
+        private readonly MainDTOValidator<LogInRequestDTO> _logInValidator;
+        private readonly MainDTOValidator<SignUpRequestDTO> _signUpValidator;
+        private readonly IUtilities _utils;
         public AuthService(
             EuphorologContext context,
             IUsersRepository usersRepository,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor,
             IMapper mapper,
+            IUtilities utils,
             MainDTOValidator<LogInRequestDTO> logInValidator,
             MainDTOValidator<SignUpRequestDTO> signUpValidator
         )
@@ -46,34 +48,34 @@ namespace Euphorolog.Services.Services
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
+            _utils = utils;
             _logInValidator = logInValidator;
             _signUpValidator = signUpValidator;
         }
 
-        public async Task<SignUpResponseDTO> SignUp(SignUpRequestDTO req)
+        public async Task<SignUpResponseDTO> SignUpAsync(SignUpRequestDTO req)
         {
             _signUpValidator.ValidateDTO(req);
-            if (await _usersRepository.UserExists(req.userName))
+            if (await _usersRepository.CheckUserExistsAsync(req.userName))
             {
                 throw new BadRequestException("User already exists!");
             }
-            if (await _usersRepository.EmailUsed(req.eMail))
+            if (await _usersRepository.CheckEmailUsedAsync(req.eMail))
             {
                 throw new BadRequestException("Email already used!");
             }
             var user = _mapper.Map<Users>(req);
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
-            _utils.CreatePasswordHash(user.password, out byte[] passwordHash, out byte[] passwordSalt);
+            _utils.CreatePasswordHash(req.password, out byte[] passwordHash, out byte[] passwordSalt);
             user.passwordHash = passwordHash;
             user.passwordSalt = passwordSalt;
             user.passChangedAt = DateTime.UtcNow;
-            var userInfo = await _usersRepository.SignUp(user);
+            var userInfo = await _usersRepository.SignUpAsync(user);
             var ret = _mapper.Map<SignUpResponseDTO>(userInfo);
             ret.token = _utils.CreateJWTToken(userInfo);
             return ret;
         }
 
-        public async Task<LogInResponseDTO> LogIn(LogInRequestDTO user)
+        public async Task<LogInResponseDTO> LogInAsync(LogInRequestDTO user)
         {
             _logInValidator.ValidateDTO(user);
             var userInfo = await _usersRepository.GetUserByIdAsync(user.userName);
@@ -81,7 +83,6 @@ namespace Euphorolog.Services.Services
             {
                 throw new NotFoundException("User doesn't exist!");
             }
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
             if (!_utils.VerifyPasswordHash(user.password, userInfo.passwordHash, userInfo.passwordSalt))
             {
                 throw new BadRequestException("username or password wrong!");
@@ -92,7 +93,7 @@ namespace Euphorolog.Services.Services
             return sendInfo;
         }
 
-        public async Task<LogInResponseDTO> Verify()
+        public async Task<LogInResponseDTO> VerifyAsync()
         {
             var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
             if (username == null)
@@ -104,7 +105,6 @@ namespace Euphorolog.Services.Services
             {
                 throw new NotFoundException("User doesn't exist!");
             }
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(username)))
             {
                 throw new UnAuthorizedException("LogIn First!");

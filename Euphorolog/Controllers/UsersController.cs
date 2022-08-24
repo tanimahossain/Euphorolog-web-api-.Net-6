@@ -1,4 +1,8 @@
 ﻿using Euphorolog.Database.Models;
+using Euphorolog.Filter;
+using Euphorolog.Helpers;
+using Euphorolog.Services.Contracts;
+using Euphorolog.Services.DTOs.StoriesDTOs;
 using Euphorolog.Services.DTOs.UsersDTOs;
 using Euphorolog.Services.Services;
 using Euphorolog.Wrappers;
@@ -12,10 +16,14 @@ namespace Euphorolog.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        public readonly IUsersService _usersService;
-        public UsersController(IUsersService storiesService)
+        private readonly IUsersService _usersService;
+        private readonly IStoriesService _storiesService;
+        private readonly IUriService _uriService;
+        public UsersController(IUsersService usersService, IStoriesService storiesService, IUriService uriService)
         {
-            _usersService = storiesService;
+            _usersService = usersService;
+            _storiesService = storiesService;
+            _uriService = uriService;
         }
 
         [HttpGet]
@@ -30,6 +38,16 @@ namespace Euphorolog.Controllers
         {
             var ret = await _usersService.GetUserByIdAsync(id);
             return Ok(new UserResponse<UserInfoResponseDTO>(ret));
+        }
+        [HttpGet("{username}/stories")]
+        public async Task<ActionResult<PagedResponse<List<GetAllStoriesResponseDTO>>>> GetStoriesByUserIdAsync(string username, [FromQuery] PaginationFilter filter)
+        {
+            var route = Request.Path.Value;
+            var validFilter = new PaginationFilter(filter.pageNumber, filter.pageSize);
+            var pagedData = await _storiesService.GetStoriesByUserIdAsync(filter.pageNumber, filter.pageSize,username);
+            var totalRecords = await _storiesService.GetTotalStoryCountOfAUserAsync(username);
+            var pagedReponse = PaginationHelper.CreatePagedReponse<GetAllStoriesResponseDTO>(pagedData, validFilter, totalRecords, _uriService, route);
+            return Ok(pagedReponse);
         }
 
         [HttpPut("{id}"),Authorize]

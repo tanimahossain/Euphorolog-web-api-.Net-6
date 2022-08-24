@@ -18,7 +18,6 @@ namespace Euphorolog.Database.ModelConfigurations
                 .HasKey("storyId");
             builder
                 .Property(u => u.storyId)
-                .IsRequired()
                 .HasMaxLength(100);
 
             //storyNo
@@ -31,17 +30,12 @@ namespace Euphorolog.Database.ModelConfigurations
             builder
                 .Property(s => s.storyTitle)
                 .IsRequired()
-                .HasMaxLength(150);
+                .HasMaxLength(255);
             //storyDescription
             builder
                 .Property(s => s.storyDescription)
                 .IsRequired()
-                .HasMaxLength(10005);
-            //openingLines
-            builder
-                .Property(s => s.openingLines)
-                .IsRequired()
-                .HasMaxLength(150);
+                .HasMaxLength(5005);
             //createdAt
             builder
                 .Property(s => s.createdAt)

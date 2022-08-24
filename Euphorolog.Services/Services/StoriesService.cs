@@ -2,8 +2,10 @@
 using Euphorolog.Database.Context;
 using Euphorolog.Database.Models;
 using Euphorolog.Repository.Contracts;
+using Euphorolog.Services.Contracts;
 using Euphorolog.Services.CustomExceptions;
 using Euphorolog.Services.DTOs.StoriesDTOs;
+using Euphorolog.Services.DTOValidators;
 using Euphorolog.Services.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -21,36 +23,51 @@ namespace Euphorolog.Services.Services
 {
     public class StoriesService : IStoriesService
     {
-        public readonly EuphorologContext _context;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public readonly IStoriesRepository _storiesRepository;
-        public readonly IUsersRepository _usersRepository;
-        public readonly IConfiguration _configuration;
-        public readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IStoriesRepository _storiesRepository;
+        private readonly IUsersRepository _usersRepository;
+        private readonly IUtilities _utils;
+        private readonly IMapper _mapper;
+        private readonly MainDTOValidator<PostStoryRequestDTO> _postStoryValidator;
+        private readonly MainDTOValidator<UpdateStoryRequestDTO> _updateStoryValidator;
         public StoriesService(
-            EuphorologContext context,
             IStoriesRepository storiesRepository,
             IUsersRepository usersRepository,
-            IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor,
-            IMapper mapper)
+            IUtilities utils,
+            IMapper mapper,
+            MainDTOValidator<PostStoryRequestDTO> postStoryValidator,
+            MainDTOValidator<UpdateStoryRequestDTO> updateStoryValidator)
         {
-            _context = context;
             _httpContextAccessor = httpContextAccessor;
             _storiesRepository = storiesRepository;
             _usersRepository = usersRepository;
-            _configuration = configuration;
+            _utils = utils;
             _mapper = mapper;
+            _postStoryValidator = postStoryValidator;
+            _updateStoryValidator = updateStoryValidator;
         }
-        public async Task<int> TotalStoryNoAsync()
+        public async Task<int> GetTotalStoryCountAsync()
         {
-            var ret = await _storiesRepository.TotalStoryNoAsync();
+            var ret = await _storiesRepository.GetTotalStoryCountAsync();
             return ret;
 
         }
         public async Task<List<GetAllStoriesResponseDTO>> GetAllStoriesAsync(int pageNumber, int pageSize)
         {
             var ret = await _storiesRepository.GetAllStoriesAsync(pageNumber,pageSize);
+            return _mapper.Map<List<GetAllStoriesResponseDTO>>(ret);
+
+        }
+        public async Task<int> GetTotalStoryCountOfAUserAsync(string username)
+        {
+            var ret = await _storiesRepository.GetTotalStoryCountOfAUserAsync(username);
+            return ret;
+
+        }
+        public async Task<List<GetAllStoriesResponseDTO>> GetStoriesByUserIdAsync(int pageNumber, int pageSize, string username)
+        {
+            var ret = await _storiesRepository.GetStoriesByUserIdAsync(pageNumber, pageSize, username);
             return _mapper.Map<List<GetAllStoriesResponseDTO>>(ret);
 
         }
@@ -68,31 +85,24 @@ namespace Euphorolog.Services.Services
         public async Task<GetStoryByIdResponseDTO> PostStoryAsync(PostStoryRequestDTO req)
         {
             /*
-             * If the user is logged in
              * If the token is valid based on time
              */
+
+            _postStoryValidator.ValidateDTO(req);
             // user logged in
             var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-            if(username == null)
-            {
-                throw new UnAuthorizedException("LogIn first!");
-            }
             // token valid based on time
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(username)))
             {
                 throw new UnAuthorizedException("LogIn Again!");
             }
 
             Stories story = _mapper.Map<Stories>(req);
-            int mx = await _storiesRepository.MaxStoryNoByUserId(username);
+            int mx = await _storiesRepository.GetMaxStoryNoByUserId(username);
             story.storyId = $"{username}-{(mx + 1)}";
 
             story.authorName = username;
             story.storyNo = mx + 1;
-
-            int openingLineLength = Math.Min(100, story.storyDescription.Length);
-            story.openingLines = story.storyDescription.Substring(0,openingLineLength) + "...";
 
             story.createdAt = DateTime.UtcNow;
             story.updatedAt = DateTime.UtcNow;
@@ -103,21 +113,14 @@ namespace Euphorolog.Services.Services
         public async Task DeleteStoryAsync(string id)
         {
             /*
-             * If the user is logged in
              * If the token is valid based on time
              * If the story Exists
              * If the story is their's
              */
 
-            // user logged in
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-            if (username == null)
-            {
-                throw new UnAuthorizedException("LogIn first!");
-            }
 
             // token valid based on time
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
+            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(username)))
             {
                 throw new UnAuthorizedException("LogIn Again!");
@@ -141,21 +144,14 @@ namespace Euphorolog.Services.Services
         public async Task<GetStoryByIdResponseDTO> UpdateStoryAsync(string id, UpdateStoryRequestDTO req)
         {
             /*
-             * If the user is logged in
              * If the token is valid based on time
              * If the story Exists
              * If the story is their's
              */
 
-            // user logged in
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-            if (username == null)
-            {
-                throw new UnAuthorizedException("LogIn first!");
-            }
-
+            _updateStoryValidator.ValidateDTO(req);
             // token valid based on time
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
+            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(username)))
             {
                 throw new UnAuthorizedException("LogIn Again!");
@@ -176,11 +172,6 @@ namespace Euphorolog.Services.Services
 
 
             var changedStory = _mapper.Map<Stories>(req);
-            if (changedStory.storyDescription != null)
-            {
-                int openingLineLength = Math.Min(99, changedStory.storyDescription.Length);
-                changedStory.openingLines = changedStory.storyDescription.Substring(0, openingLineLength) + "...";
-            }
             var ret = await _storiesRepository.UpdateStoryAsync(id, changedStory);
             return _mapper.Map<GetStoryByIdResponseDTO>(ret);
         }

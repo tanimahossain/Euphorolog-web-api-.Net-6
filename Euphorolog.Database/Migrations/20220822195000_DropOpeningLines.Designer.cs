@@ -4,6 +4,7 @@ using Euphorolog.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Euphorolog.Database.Migrations
 {
     [DbContext(typeof(EuphorologContext))]
-    partial class EuphorologContextModelSnapshot : ModelSnapshot
+    [Migration("20220822195000_DropOpeningLines")]
+    partial class DropOpeningLines
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace Euphorolog.Database.Migrations
 
                     b.HasIndex("authorName");
 
-                    b.ToTable("stories", (string)null);
+                    b.ToTable("stories");
                 });
 
             modelBuilder.Entity("Euphorolog.Database.Models.Users", b =>
@@ -95,7 +97,7 @@ namespace Euphorolog.Database.Migrations
                     b.HasIndex("userName")
                         .IsUnique();
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("Euphorolog.Database.Models.Stories", b =>

@@ -12,5 +12,6 @@ namespace Euphorolog.Services.Contracts
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
         public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
         public string CreateJWTToken(Users user);
+        public bool tokenStillValid(DateTime passwordChangedAt);
     }
 }

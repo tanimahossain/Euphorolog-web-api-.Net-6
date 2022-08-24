@@ -12,27 +12,27 @@ namespace Euphorolog.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public readonly IAuthService _authService;
+        private readonly IAuthService _authService;
         public AuthController(IAuthService authService)
         {
             _authService = authService;
         }
         [HttpPost("SignUp")]
-        public async Task<ActionResult<AuthResponse<SignUpResponseDTO>>> SignUp(SignUpRequestDTO user)
+        public async Task<ActionResult<AuthResponse<SignUpResponseDTO>>> SignUpAsync(SignUpRequestDTO user)
         {
-            var response = await _authService.SignUp(user);
+            var response = await _authService.SignUpAsync(user);
             return Ok(new AuthResponse<SignUpResponseDTO>(response));
         }
         [HttpPost("LogIn")]
-        public async Task<ActionResult<AuthResponse<LogInResponseDTO>>> LogIn(LogInRequestDTO user)
+        public async Task<ActionResult<AuthResponse<LogInResponseDTO>>> LogInAsync(LogInRequestDTO user)
         {
-            var response = await _authService.LogIn(user);
+            var response = await _authService.LogInAsync(user);
             return Ok(new AuthResponse<LogInResponseDTO>(response));
         }
         [HttpPost("verify"),Authorize]
-        public async Task<ActionResult<AuthResponse<LogInResponseDTO>>> Verify()
+        public async Task<ActionResult<AuthResponse<LogInResponseDTO>>> VerifyAsync()
         {
-            var response = await _authService.Verify();
+            var response = await _authService.VerifyAsync();
             return Ok(new AuthResponse<LogInResponseDTO>(response));
         }
     }

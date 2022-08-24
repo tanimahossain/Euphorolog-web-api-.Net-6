@@ -14,15 +14,18 @@ namespace Euphorolog.Services.DTOValidators.AuthDTOValidators
         public LogInRequestDTOValidator()
         {
             RuleFor(u => u.userName)
-                .NotNull().WithMessage("Username can not be null.")
-                .NotEmpty().WithMessage("Username can not be empty.");
+                .NotNull()
+                .NotEmpty()
+                .MaximumLength(50)
+                .Matches("^[a-z]+[0-9a-z]+$").WithMessage("Only use latin letters or digits, starting with a letter");
             RuleFor(u => u.password)
-                .NotNull().WithMessage("Password can not be null.")
-                .NotEmpty().WithMessage("Password can not be empty")
+                .NotNull()
+                .NotEmpty()
+                .MinimumLength(8)
+                .MaximumLength(32)
                 .Matches("^[0-9a-zA-Z~`!@#$%^&*._+=|:;<>,?-]+$")
-                .When(u => u.password != null).WithMessage("Password can only contain Latin letters and these characters: ~`!@#$%^&*._+=|:;<>,?-");
+                .When(u => u.password != null).WithMessage("Can only contain Latin letters and these characters: ~`!@#$%^&*._+=|:;<>,?-");
                 
         }
     }
 }
-//<>,?
