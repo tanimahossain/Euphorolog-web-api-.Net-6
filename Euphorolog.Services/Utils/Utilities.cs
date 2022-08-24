@@ -13,11 +13,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace Euphorolog.Services.Utils
 {
-    public class Utilities
+    public class Utilities : IUtilities
     {
-        public readonly IConfiguration _configuration;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public static int TokenValidTimeSpan = 10;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private static int TokenValidTimeSpan = 10;
         public Utilities(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration =  configuration;

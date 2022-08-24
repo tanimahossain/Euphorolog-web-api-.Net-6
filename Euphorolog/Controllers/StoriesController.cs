@@ -15,8 +15,8 @@ namespace Euphorolog.Controllers
     [ApiController] 
     public class StoriesController : ControllerBase
     {
-        public readonly IStoriesService _storiesService;
-        public readonly IUriService _uriService;
+        private readonly IStoriesService _storiesService;
+        private readonly IUriService _uriService;
         public StoriesController(
             IStoriesService storiesService,
             IUriService UriService
@@ -31,7 +31,7 @@ namespace Euphorolog.Controllers
             var route = Request.Path.Value;
             var validFilter = new PaginationFilter(filter.pageNumber, filter.pageSize);
             var pagedData = await _storiesService.GetAllStoriesAsync(filter.pageNumber, filter.pageSize);
-            var totalRecords = await _storiesService.TotalStoryNoAsync();
+            var totalRecords = await _storiesService.GetTotalStoryCountAsync();
             var pagedReponse = PaginationHelper.CreatePagedReponse<GetAllStoriesResponseDTO>(pagedData, validFilter, totalRecords, _uriService, route);
             return Ok(pagedReponse);
         }
@@ -48,7 +48,7 @@ namespace Euphorolog.Controllers
             return Ok(new StoryResponse<GetStoryByIdResponseDTO>(ret));
         }
         [HttpPut("{id}"),Authorize]
-        public async Task<ActionResult<GetStoryByIdResponseDTO>> Put([FromRoute] string id, [FromBody] UpdateStoryRequestDTO story)
+        public async Task<ActionResult<GetStoryByIdResponseDTO>> UpdateStoryAsync([FromRoute] string id, [FromBody] UpdateStoryRequestDTO story)
         {
             var ret = await _storiesService.UpdateStoryAsync(id, story);
             return Ok(new StoryResponse<GetStoryByIdResponseDTO>(ret));
@@ -61,7 +61,7 @@ namespace Euphorolog.Controllers
             var route = Request.Path.Value;
             var validFilter = new PaginationFilter(1, 10);
             var pagedData = await _storiesService.GetAllStoriesAsync(1, 10);
-            var totalRecords = await _storiesService.TotalStoryNoAsync();
+            var totalRecords = await _storiesService.GetTotalStoryCountAsync();
             var pagedReponse = PaginationHelper.CreatePagedReponse<GetAllStoriesResponseDTO>(pagedData, validFilter, totalRecords, _uriService, route);
             return Ok(pagedReponse);
         }

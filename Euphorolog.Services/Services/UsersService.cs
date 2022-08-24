@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Euphorolog.Database.Context;
 using Euphorolog.Database.Models;
 using Euphorolog.Repository.Contracts;
+using Euphorolog.Services.Contracts;
 using Euphorolog.Services.CustomExceptions;
 using Euphorolog.Services.DTOs.UsersDTOs;
-using Euphorolog.Services.Utils;
+using Euphorolog.Services.DTOValidators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -18,23 +18,24 @@ namespace Euphorolog.Services.Services
 {
     public class UsersService : IUsersService
     {
-        public readonly EuphorologContext _context;
-        public readonly IUsersRepository _usersRepository;
-        public readonly IConfiguration _configuration;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public readonly IMapper _mapper;
+        private readonly IUsersRepository _usersRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUtilities _utils;
+        private readonly IMapper _mapper;
+        private readonly MainDTOValidator<UpdateUserInfoRequestDTO> _updateUserInfoValidator;
         public UsersService(
-            EuphorologContext context,
             IUsersRepository usersRepository,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor,
-            IMapper mapper)
+            IUtilities utils,
+            IMapper mapper,
+            MainDTOValidator<UpdateUserInfoRequestDTO> updateUserInfoValidator)
         {
-            _context = context;
             _usersRepository = usersRepository;
-            _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _utils = utils;
             _mapper = mapper;
+            _updateUserInfoValidator = updateUserInfoValidator;
         }
         public async Task<List<UserInfoResponseDTO>> GetAllUsersAsync()
         {
@@ -55,21 +56,13 @@ namespace Euphorolog.Services.Services
         public async Task DeleteUserAsync(string id)
         {
             /*
-             * If the user is logged in
              * If the token is valid based on time
              * If the user Exists
              * If the id is their's
              */
 
-            // User logged In
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-            if(username == null)
-            {
-                throw new UnAuthorizedException("Log In First!");
-            }
-
             // token validation based on time
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
+            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(id)))
             {
                 throw new UnAuthorizedException("LogIn First!");
@@ -94,23 +87,15 @@ namespace Euphorolog.Services.Services
         }
         public async Task<UpdateUserInfoResponseDTO> UpdateUserAsync(string id, UpdateUserInfoRequestDTO req)
         {
-
             /*
-             * If the user is logged in
              * If the token is valid based on time
              * If the user Exists
              * If the id is their's
              */
 
-            // User logged In
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-            if (username == null)
-            {
-                throw new UnAuthorizedException("Log In First!");
-            }
-
+            _updateUserInfoValidator.ValidateDTO(req);
             // token validation based on time
-            var _utils = new Utilities(_configuration, _httpContextAccessor);
+            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(id)))
             {
                 throw new UnAuthorizedException("LogIn First!");
@@ -131,12 +116,15 @@ namespace Euphorolog.Services.Services
 
 
             var reqUser = _mapper.Map<Users>(req);
-            var updatedUser = await _usersRepository.UpdateUserAsync(id, reqUser);
             bool passChangedflag = false;
-            if (reqUser.password != null)
+            if (req.password != null)
             {
+                _utils.CreatePasswordHash(req.password, out byte[] passwordHash, out byte[] passwordSalt);
+                reqUser.passwordHash = passwordHash;
+                reqUser.passwordSalt = passwordSalt;
                 passChangedflag = true;
             }
+            var updatedUser = await _usersRepository.UpdateUserAsync(id, reqUser);
             var ret = _mapper.Map<UpdateUserInfoResponseDTO>(updatedUser);
             if (passChangedflag)
             {

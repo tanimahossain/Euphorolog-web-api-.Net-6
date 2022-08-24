@@ -11,7 +11,7 @@ namespace Euphorolog.Services.DTOs.StoriesDTOs
         public string storyId { get; set; }
         public string storyTitle { get; set; }
         public string authorName { get; set; }
-        public string openingLines { get; set; }
+        public string storyDescription { get; set; }
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
     }

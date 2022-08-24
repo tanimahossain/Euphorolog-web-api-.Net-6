@@ -17,9 +17,4 @@
     <ProjectReference Include="..\Eupholog.Repository\Euphorolog.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOValidators\UsersDTOValidators\" />
-    <Folder Include="DTOValidators\StoriesDTOValidators\" />
-  </ItemGroup>
-
 </Project>

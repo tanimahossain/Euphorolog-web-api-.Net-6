@@ -13,10 +13,9 @@ namespace Euphorolog.Database.Models
         public string userName { get; set; }
         public string fullName { get; set; }
         public string eMail { get; set; }
-        public string password { get; set; }
-        public byte[]? passwordHash { get; set; }
-        public byte[]? passwordSalt { get; set; }
-        public DateTime? passChangedAt { get; set; }
-        public ICollection<Stories>? stories { get; set; }
+        public byte[] passwordHash { get; set; }
+        public byte[] passwordSalt { get; set; }
+        public DateTime passChangedAt { get; set; }
+        public virtual ICollection<Stories>? stories { get; set; }
     }
 }

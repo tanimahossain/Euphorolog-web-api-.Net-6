@@ -10,8 +10,8 @@ namespace Euphorolog.Services.Contracts
 {
     public interface IAuthService
     {
-        Task<SignUpResponseDTO> SignUp(SignUpRequestDTO user);
-        Task<LogInResponseDTO> LogIn(LogInRequestDTO user);
-        Task<LogInResponseDTO> Verify();
+        Task<SignUpResponseDTO> SignUpAsync(SignUpRequestDTO user);
+        Task<LogInResponseDTO> LogInAsync(LogInRequestDTO user);
+        Task<LogInResponseDTO> VerifyAsync();
     }
 }

@@ -11,12 +11,12 @@ namespace Euphorolog.Repository.Contracts
     {
         Task<List<Users>> GetAllUsersAsync();
         Task<Users?> GetUserByIdAsync(string id);
-        Task<Users> SignUp(Users user);
+        Task<Users> SignUpAsync(Users user);
         Task<List<Users>> CreateUserAsync(Users user);
         Task DeleteUserAsync(string id);
         Task<Users> UpdateUserAsync(string id, Users user);
-        Task<bool> UserExists(string id);
-        Task<bool> EmailUsed(string id);
+        Task<bool> CheckUserExistsAsync(string id);
+        Task<bool> CheckEmailUsedAsync(string id);
         Task<DateTime> GetPasswordChangedAtAsync(string id);
     }
 }
