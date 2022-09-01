@@ -77,6 +77,25 @@ namespace Euphorolog.UnitTests.Service.ServicesFixtures
             }
         };
         public static List<GetStoryResponseDTO> GetAllTestStoryResponseDTO() => StoriesDTO;
+        public static List<GetStoryResponseDTO> GetAllPagedTestStoriesByIdDTO(int pageNumber, int pageSize, string id)
+        {
+            List<GetStoryResponseDTO> UserStories = new List<GetStoryResponseDTO>();
+            for (int i = 0; i < StoriesDTO.Count; i++)
+            {
+                if (StoriesDTO[i].authorName == id)
+                {
+                    UserStories.Add(StoriesDTO[i]);
+                }
+            }
+            List<GetStoryResponseDTO> PagedStories = new List<GetStoryResponseDTO>();
+            int b = (pageNumber - 1) * pageSize;
+            int e = Math.Min(b + pageSize, UserStories.Count);
+            for (int i = b; i < e; i++)
+            {
+                PagedStories.Add(UserStories[i]);
+            }
+            return PagedStories;
+        }
         public static GetStoryResponseDTO GetTestStoryResponseDTO(int id) => StoriesDTO[id];
         public static int GetAllTestStoriesDTOCount() => StoriesDTO.Count;
         /// Stories

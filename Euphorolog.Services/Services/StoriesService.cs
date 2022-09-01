@@ -38,16 +38,16 @@ namespace Euphorolog.Services.Services
             return ret;
 
         }
-        public async Task<List<GetStoryResponseDTO>> GetAllStoriesAsync(int pageNumber, int pageSize)
-        {
-            var ret = await _storiesRepository.GetAllStoriesAsync(pageNumber,pageSize);
-            return _mapper.Map<List<GetStoryResponseDTO>>(ret);
-
-        }
         public async Task<int> GetTotalStoryCountOfAUserAsync(string username)
         {
             var ret = await _storiesRepository.GetTotalStoryCountOfAUserAsync(username);
             return ret;
+
+        }
+        public async Task<List<GetStoryResponseDTO>> GetAllStoriesAsync(int pageNumber, int pageSize)
+        {
+            var ret = await _storiesRepository.GetAllStoriesAsync(pageNumber,pageSize);
+            return _mapper.Map<List<GetStoryResponseDTO>>(ret);
 
         }
         public async Task<List<GetStoryResponseDTO>> GetStoriesByUserIdAsync(int pageNumber, int pageSize, string username)
@@ -61,7 +61,7 @@ namespace Euphorolog.Services.Services
             var ret = await _storiesRepository.GetStoryByIdAsync(id);
             if(ret == null)
             {
-                throw new NotFoundException("Story not Found.");
+                throw new NotFoundException("Story not Found!");
             }
             GetStoryResponseDTO story = _mapper.Map<GetStoryResponseDTO>(ret);
             return story;

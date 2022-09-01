@@ -96,7 +96,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -147,7 +146,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -197,7 +195,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -250,7 +247,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -299,7 +295,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -348,7 +343,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -397,7 +391,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -446,7 +439,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -495,7 +487,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -545,7 +536,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -602,7 +592,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -652,7 +641,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -701,7 +689,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -751,7 +738,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -802,7 +788,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -853,7 +838,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -903,7 +887,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -953,7 +936,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
@@ -1003,7 +985,6 @@
             var FakePostStoryRequestDTOValidator = A.Fake<MainDTOValidator<PostStoryRequestDTO>>();
             var FakeUpdateStoryRequestDTOValidator = A.Fake<MainDTOValidator<UpdateStoryRequestDTO>>();
             var FakeUtils = A.Fake<IUtilities>();
-            string JWTToken = "ThisIsAJWTToken";
             var FakePostStoryDTO = StoryServicesFixtures.GetTestPostStoryDTO();
             var FakeStory = StoryServicesFixtures.GetTestStory(ind);
             var FakeGetStoryDTO = StoryServicesFixtures.GetTestStoryResponseDTO(ind);
