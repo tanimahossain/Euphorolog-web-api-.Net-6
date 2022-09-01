@@ -56,12 +56,10 @@ namespace Euphorolog.Repository.Repositories
             return ret;
 
         }
-        public async Task<int> GetMaxStoryNoByUserId(string username)
+        public async Task<int?> GetMaxStoryNoByUserIdAsync(string username)
         {
             int? mx = await _context.stories.MaxAsync(s => s.authorName == username ? s.storyNo : 0);
-            if (mx == null)
-                mx = 0;
-            return (int)mx;
+            return mx;
         }
         public async Task<Stories> PostStoryAsync(Stories story)
         {
@@ -69,13 +67,13 @@ namespace Euphorolog.Repository.Repositories
             await _context.SaveChangesAsync();
             return story;
         }
-        public async Task DeleteStoryAsync(string id)
+        public async Task<bool> DeleteStoryAsync(string id)
         {
             var ret = await _context.stories.FirstOrDefaultAsync(s => s.storyId == id);
             if(ret != null)
                 _context.stories.Remove(ret);
             await _context.SaveChangesAsync();
-            return;
+            return true;
         }
         public async Task<Stories> UpdateStoryAsync(string id, Stories story)
         {
@@ -87,12 +85,12 @@ namespace Euphorolog.Repository.Repositories
             if (story.storyTitle != null)
             {
                 ret.storyTitle = story.storyTitle;
-                ret.updatedAt = DateTime.UtcNow;
+                ret.updatedAt = story.updatedAt;
             }
             if (story.storyDescription != null)
             {
                 ret.storyDescription = story.storyDescription;
-                ret.updatedAt = DateTime.UtcNow;
+                ret.updatedAt = story.updatedAt;
             }
             await _context.SaveChangesAsync();
             return ret;

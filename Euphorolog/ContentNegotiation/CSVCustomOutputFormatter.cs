@@ -20,7 +20,7 @@ namespace Euphorolog.ContentNegotiation
         }
         protected override bool CanWriteType(Type? type)
         {
-            if (typeof(GetStoryByIdResponseDTO).IsAssignableFrom(type) || typeof(IEnumerable<GetStoryByIdResponseDTO>).IsAssignableFrom(type))
+            if (typeof(GetStoryResponseDTO).IsAssignableFrom(type) || typeof(IEnumerable<GetStoryResponseDTO>).IsAssignableFrom(type))
                 return base.CanWriteType(type);
             return false;
         }
@@ -29,23 +29,23 @@ namespace Euphorolog.ContentNegotiation
             var response = context.HttpContext.Response;
             var buffer = new StringBuilder();
             buffer.AppendLine($"StoryID,Title,Author,Story,Created At,Updated At");
-            if (context.Object is IEnumerable<GetStoryByIdResponseDTO>)
+            if (context.Object is IEnumerable<GetStoryResponseDTO>)
             {
-                IEnumerable<GetStoryByIdResponseDTO> stories = (IEnumerable<GetStoryByIdResponseDTO>)context.Object;
-                foreach (GetStoryByIdResponseDTO story in stories)
+                IEnumerable<GetStoryResponseDTO> stories = (IEnumerable<GetStoryResponseDTO>)context.Object;
+                foreach (GetStoryResponseDTO story in stories)
                 {
                     ConvertToCSV(buffer, story);
                 }
             }
             else
             {
-                ConvertToCSV(buffer, (GetStoryByIdResponseDTO)context.Object);
+                ConvertToCSV(buffer, (GetStoryResponseDTO)context.Object);
             }
             await response.WriteAsync(buffer.ToString());
         }
 
 
-        private static void ConvertToCSV(StringBuilder buffer, GetStoryByIdResponseDTO story)
+        private static void ConvertToCSV(StringBuilder buffer, GetStoryResponseDTO story)
         {
             buffer.AppendLine($"{story.storyId},{story.storyTitle},{story.authorName},{story.storyDescription},{story.createdAt},{story.updatedAt}");
         }

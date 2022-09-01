@@ -5,11 +5,17 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Euphorolog", "Euphorolog\Euphorolog.csproj", "{533B4DD2-832E-4DA8-AA7B-AAB4047C6EA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.Repository", "Eupholog.Repository\Euphorolog.Repository.csproj", "{0D289BC2-4B05-4D3A-9705-81A0962CF009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Euphorolog.Repository", "Eupholog.Repository\Euphorolog.Repository.csproj", "{0D289BC2-4B05-4D3A-9705-81A0962CF009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.Services", "Euphorolog.Services\Euphorolog.Services.csproj", "{8A9B5305-DA36-4A8B-A9B1-E6945D386BA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Euphorolog.Services", "Euphorolog.Services\Euphorolog.Services.csproj", "{8A9B5305-DA36-4A8B-A9B1-E6945D386BA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.Database", "Euphorolog.Database\Euphorolog.Database.csproj", "{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Euphorolog.Database", "Euphorolog.Database\Euphorolog.Database.csproj", "{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Euphorolog.UnitTests.Controller", "Euphorolog.UnitTests.Controller\Euphorolog.UnitTests.Controller.csproj", "{F4B7B0A4-BDCB-4B53-B24A-EDB85A713305}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.UnitTests.Service", "Euphorolog.UnitTests.Services\Euphorolog.UnitTests.Service.csproj", "{3F930D28-9D95-4D4F-BD48-0ADD474DEF70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euphorolog.UnitTests.Repository", "Euphorolog.UnitTests.Repository\Euphorolog.UnitTests.Repository.csproj", "{8DC270DC-B3F1-4E0E-9F9C-667869818FBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71FD2D72-6A42-4893-9AD1-9B2C772A8D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4B7B0A4-BDCB-4B53-B24A-EDB85A713305}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4B7B0A4-BDCB-4B53-B24A-EDB85A713305}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4B7B0A4-BDCB-4B53-B24A-EDB85A713305}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4B7B0A4-BDCB-4B53-B24A-EDB85A713305}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F930D28-9D95-4D4F-BD48-0ADD474DEF70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F930D28-9D95-4D4F-BD48-0ADD474DEF70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F930D28-9D95-4D4F-BD48-0ADD474DEF70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F930D28-9D95-4D4F-BD48-0ADD474DEF70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DC270DC-B3F1-4E0E-9F9C-667869818FBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DC270DC-B3F1-4E0E-9F9C-667869818FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DC270DC-B3F1-4E0E-9F9C-667869818FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DC270DC-B3F1-4E0E-9F9C-667869818FBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

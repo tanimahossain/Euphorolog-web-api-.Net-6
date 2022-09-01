@@ -20,7 +20,7 @@ namespace Euphorolog.ContentNegotiation
         }
         protected override bool CanWriteType(Type? type)
         {
-            if (typeof(GetStoryByIdResponseDTO).IsAssignableFrom(type) || typeof(IEnumerable<GetStoryByIdResponseDTO>).IsAssignableFrom(type))
+            if (typeof(GetStoryResponseDTO).IsAssignableFrom(type) || typeof(IEnumerable<GetStoryResponseDTO>).IsAssignableFrom(type))
                 return base.CanWriteType(type);
             return false;
         }
@@ -29,23 +29,23 @@ namespace Euphorolog.ContentNegotiation
             var response = context.HttpContext.Response;
             var buffer = new StringBuilder();
 
-            if (context.Object is IEnumerable<GetStoryByIdResponseDTO>)
+            if (context.Object is IEnumerable<GetStoryResponseDTO>)
             {
-                IEnumerable<GetStoryByIdResponseDTO> stories = (IEnumerable<GetStoryByIdResponseDTO>)context.Object;
-                foreach (GetStoryByIdResponseDTO story in stories)
+                IEnumerable<GetStoryResponseDTO> stories = (IEnumerable<GetStoryResponseDTO>)context.Object;
+                foreach (GetStoryResponseDTO story in stories)
                 {
                     ConvertToHTML(buffer, story);
                 }
             }
             else
             {
-                ConvertToHTML(buffer, (GetStoryByIdResponseDTO)context.Object);
+                ConvertToHTML(buffer, (GetStoryResponseDTO)context.Object);
             }
             await response.WriteAsync(buffer.ToString());
         }
 
 
-        private static void ConvertToHTML(StringBuilder buffer, GetStoryByIdResponseDTO story)
+        private static void ConvertToHTML(StringBuilder buffer, GetStoryResponseDTO story)
         {
             buffer.AppendLine($"<article><small>{story.storyId}</small><h2>{story.storyTitle}</h2><h5>{story.authorName}</h5><small>{story.createdAt}<br>{story.updatedAt}</small><br><big>{story.storyDescription}</big></article>");
         }

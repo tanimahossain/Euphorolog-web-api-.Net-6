@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Euphorolog.Services.DTOs.StoriesDTOs
 {
-    public class GetStoryByIdResponseDTO
+    public class GetStoryResponseDTO
     {
         public string storyId { get; set; }
         public string storyTitle { get; set; }

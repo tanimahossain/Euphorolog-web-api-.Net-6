@@ -17,8 +17,7 @@ namespace Euphorolog.Services.Utils
         public AutoMapperProfile()
         {
             //Stories Mappers
-            CreateMap<Stories, GetAllStoriesResponseDTO>();
-            CreateMap<Stories, GetStoryByIdResponseDTO>();
+            CreateMap<Stories, GetStoryResponseDTO>();
             CreateMap<PostStoryRequestDTO, Stories>();
             CreateMap<UpdateStoryRequestDTO, Stories>();
 

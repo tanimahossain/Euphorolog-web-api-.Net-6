@@ -74,5 +74,13 @@ namespace Euphorolog.Services.Utils
             }
             return true;
         }
+        public DateTime GetDateTimeUTCNow()
+        {
+            return DateTime.UtcNow;
+        }
+        public string GetJWTTokenUsername()
+        {
+            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+        }
     }
 }

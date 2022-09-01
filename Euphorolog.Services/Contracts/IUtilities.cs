@@ -13,5 +13,7 @@ namespace Euphorolog.Services.Contracts
         public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
         public string CreateJWTToken(Users user);
         public bool tokenStillValid(DateTime passwordChangedAt);
+        public DateTime GetDateTimeUTCNow();
+        public string GetJWTTokenUsername();
     }
 }
