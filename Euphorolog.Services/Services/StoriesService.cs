@@ -1,29 +1,16 @@
 ﻿using AutoMapper;
-using Euphorolog.Database.Context;
 using Euphorolog.Database.Models;
 using Euphorolog.Repository.Contracts;
 using Euphorolog.Services.Contracts;
 using Euphorolog.Services.CustomExceptions;
 using Euphorolog.Services.DTOs.StoriesDTOs;
 using Euphorolog.Services.DTOValidators;
-using Euphorolog.Services.Utils;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Authentication;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euphorolog.Services.Services
 {
     public class StoriesService : IStoriesService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStoriesRepository _storiesRepository;
         private readonly IUsersRepository _usersRepository;
         private readonly IUtilities _utils;
@@ -33,13 +20,11 @@ namespace Euphorolog.Services.Services
         public StoriesService(
             IStoriesRepository storiesRepository,
             IUsersRepository usersRepository,
-            IHttpContextAccessor httpContextAccessor,
             IUtilities utils,
             IMapper mapper,
             MainDTOValidator<PostStoryRequestDTO> postStoryValidator,
             MainDTOValidator<UpdateStoryRequestDTO> updateStoryValidator)
         {
-            _httpContextAccessor = httpContextAccessor;
             _storiesRepository = storiesRepository;
             _usersRepository = usersRepository;
             _utils = utils;
@@ -53,36 +38,36 @@ namespace Euphorolog.Services.Services
             return ret;
 
         }
-        public async Task<List<GetAllStoriesResponseDTO>> GetAllStoriesAsync(int pageNumber, int pageSize)
-        {
-            var ret = await _storiesRepository.GetAllStoriesAsync(pageNumber,pageSize);
-            return _mapper.Map<List<GetAllStoriesResponseDTO>>(ret);
-
-        }
         public async Task<int> GetTotalStoryCountOfAUserAsync(string username)
         {
             var ret = await _storiesRepository.GetTotalStoryCountOfAUserAsync(username);
             return ret;
 
         }
-        public async Task<List<GetAllStoriesResponseDTO>> GetStoriesByUserIdAsync(int pageNumber, int pageSize, string username)
+        public async Task<List<GetStoryResponseDTO>> GetAllStoriesAsync(int pageNumber, int pageSize)
         {
-            var ret = await _storiesRepository.GetStoriesByUserIdAsync(pageNumber, pageSize, username);
-            return _mapper.Map<List<GetAllStoriesResponseDTO>>(ret);
+            var ret = await _storiesRepository.GetAllStoriesAsync(pageNumber,pageSize);
+            return _mapper.Map<List<GetStoryResponseDTO>>(ret);
 
         }
-        public async Task<GetStoryByIdResponseDTO> GetStoryByIdAsync(string id)
+        public async Task<List<GetStoryResponseDTO>> GetStoriesByUserIdAsync(int pageNumber, int pageSize, string username)
+        {
+            var ret = await _storiesRepository.GetStoriesByUserIdAsync(pageNumber, pageSize, username);
+            return _mapper.Map<List<GetStoryResponseDTO>>(ret);
+
+        }
+        public async Task<GetStoryResponseDTO> GetStoryByIdAsync(string id)
         {
             var ret = await _storiesRepository.GetStoryByIdAsync(id);
             if(ret == null)
             {
-                throw new NotFoundException("Story not Found.");
+                throw new NotFoundException("Story not Found!");
             }
-            GetStoryByIdResponseDTO story = _mapper.Map<GetStoryByIdResponseDTO>(ret);
+            GetStoryResponseDTO story = _mapper.Map<GetStoryResponseDTO>(ret);
             return story;
 
         }
-        public async Task<GetStoryByIdResponseDTO> PostStoryAsync(PostStoryRequestDTO req)
+        public async Task<GetStoryResponseDTO> PostStoryAsync(PostStoryRequestDTO req)
         {
             /*
              * If the token is valid based on time
@@ -90,27 +75,30 @@ namespace Euphorolog.Services.Services
 
             _postStoryValidator.ValidateDTO(req);
             // user logged in
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+            var username = _utils.GetJWTTokenUsername();
             // token valid based on time
-            if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(username)))
+            var passChangedAt = await _usersRepository.GetPasswordChangedAtAsync(username);
+            if (!_utils.tokenStillValid(passChangedAt))
             {
                 throw new UnAuthorizedException("LogIn Again!");
             }
 
             Stories story = _mapper.Map<Stories>(req);
-            int mx = await _storiesRepository.GetMaxStoryNoByUserId(username);
+            var mxreturned = await _storiesRepository.GetMaxStoryNoByUserIdAsync(username);
+            int mx = 0;
+            if (mxreturned != null) mx = (int)mxreturned;
             story.storyId = $"{username}-{(mx + 1)}";
 
             story.authorName = username;
             story.storyNo = mx + 1;
 
-            story.createdAt = DateTime.UtcNow;
-            story.updatedAt = DateTime.UtcNow;
+            story.createdAt = _utils.GetDateTimeUTCNow();
+            story.updatedAt = _utils.GetDateTimeUTCNow();
 
             var ret = await _storiesRepository.PostStoryAsync(story);
-            return _mapper.Map <GetStoryByIdResponseDTO>(ret);
+            return _mapper.Map <GetStoryResponseDTO>(ret);
         }
-        public async Task DeleteStoryAsync(string id)
+        public async Task<bool> DeleteStoryAsync(string id)
         {
             /*
              * If the token is valid based on time
@@ -120,7 +108,7 @@ namespace Euphorolog.Services.Services
 
 
             // token valid based on time
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+            var username = _utils.GetJWTTokenUsername();
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(username)))
             {
                 throw new UnAuthorizedException("LogIn Again!");
@@ -138,10 +126,9 @@ namespace Euphorolog.Services.Services
             {
                 throw new ForbiddenException("Not your Story!");
             }
-            await _storiesRepository.DeleteStoryAsync(id);
-            return;
+            return await _storiesRepository.DeleteStoryAsync(id);
         }
-        public async Task<GetStoryByIdResponseDTO> UpdateStoryAsync(string id, UpdateStoryRequestDTO req)
+        public async Task<GetStoryResponseDTO> UpdateStoryAsync(string id, UpdateStoryRequestDTO req)
         {
             /*
              * If the token is valid based on time
@@ -151,7 +138,7 @@ namespace Euphorolog.Services.Services
 
             _updateStoryValidator.ValidateDTO(req);
             // token valid based on time
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+            var username = _utils.GetJWTTokenUsername();
             if (!_utils.tokenStillValid(await _usersRepository.GetPasswordChangedAtAsync(username)))
             {
                 throw new UnAuthorizedException("LogIn Again!");
@@ -172,8 +159,12 @@ namespace Euphorolog.Services.Services
 
 
             var changedStory = _mapper.Map<Stories>(req);
+            if(changedStory.storyTitle != null || changedStory.storyDescription != null)
+            {
+                changedStory.updatedAt = _utils.GetDateTimeUTCNow();
+            }
             var ret = await _storiesRepository.UpdateStoryAsync(id, changedStory);
-            return _mapper.Map<GetStoryByIdResponseDTO>(ret);
+            return _mapper.Map<GetStoryResponseDTO>(ret);
         }
     }
 }

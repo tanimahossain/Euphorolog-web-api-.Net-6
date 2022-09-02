@@ -14,9 +14,9 @@ namespace Euphorolog.Repository.Contracts
         Task<int> GetTotalStoryCountOfAUserAsync(string username);
 
         Task<Stories?> GetStoryByIdAsync(string id);
-        Task<int>GetMaxStoryNoByUserId(string id);
+        Task<int?> GetMaxStoryNoByUserIdAsync(string id);
         Task<Stories> PostStoryAsync(Stories story);
-        Task DeleteStoryAsync(string id);
+        Task<bool> DeleteStoryAsync(string id);
         Task<Stories> UpdateStoryAsync(string id, Stories story);
         Task<int> GetTotalStoryCountAsync();
     }

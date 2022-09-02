@@ -20,7 +20,7 @@ namespace Euphorolog.ContentNegotiation
         }
         protected override bool CanWriteType(Type? type)
         {
-            if (typeof(GetStoryByIdResponseDTO).IsAssignableFrom(type) || typeof(IEnumerable<GetStoryByIdResponseDTO>).IsAssignableFrom(type))
+            if (typeof(GetStoryResponseDTO).IsAssignableFrom(type) || typeof(IEnumerable<GetStoryResponseDTO>).IsAssignableFrom(type))
                 return base.CanWriteType(type);
             return false;
         }
@@ -29,23 +29,23 @@ namespace Euphorolog.ContentNegotiation
             var response = context.HttpContext.Response;
             var buffer = new StringBuilder();
 
-            if (context.Object is IEnumerable<GetStoryByIdResponseDTO>)
+            if (context.Object is IEnumerable<GetStoryResponseDTO>)
             {
-                IEnumerable<GetStoryByIdResponseDTO> posts = (IEnumerable<GetStoryByIdResponseDTO>)context.Object;
-                foreach (GetStoryByIdResponseDTO post in posts)
+                IEnumerable<GetStoryResponseDTO> posts = (IEnumerable<GetStoryResponseDTO>)context.Object;
+                foreach (GetStoryResponseDTO post in posts)
                 {
                     ConvertToPlainText(buffer, post);
                 }
             }
             else
             {
-                ConvertToPlainText(buffer, (GetStoryByIdResponseDTO)context.Object);
+                ConvertToPlainText(buffer, (GetStoryResponseDTO)context.Object);
             }
             await response.WriteAsync(buffer.ToString());
         }
 
 
-        private static void ConvertToPlainText(StringBuilder buffer, GetStoryByIdResponseDTO post)
+        private static void ConvertToPlainText(StringBuilder buffer, GetStoryResponseDTO post)
         {
             buffer.AppendLine($"StoryID: {post.storyId}\nTitle: {post.storyTitle}\nAuthor: {post.authorName}\nDescription: {post.storyDescription}\ncreatedAt: {post.createdAt}\nupdatedAt: {post.updatedAt}\n");
         }

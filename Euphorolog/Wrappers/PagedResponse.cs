@@ -6,10 +6,6 @@
         public int pageSize { get; set; } = 1;
         public int totalPages { get; set; } = 1;
         public int totalRecords { get; set; } = 1;
-        public Uri? firstPage { get; set; }
-        public Uri? lastPage { get; set; }
-        public Uri? nextPage { get; set; }
-        public Uri? previousPage { get; set; }
         public PagedResponse(T data, int pageNumber, int pageSize)
         {
             this.pageNumber = pageNumber;

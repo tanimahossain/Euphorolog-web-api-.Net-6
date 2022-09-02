@@ -1,0 +1,11 @@
+global using Xunit;
+global using AutoMapper;
+global using Euphorolog.Database.Models;
+global using Euphorolog.Repository.Contracts;
+global using Euphorolog.Services.Contracts;
+global using Euphorolog.Services.DTOs.StoriesDTOs;
+global using Euphorolog.Services.DTOValidators;
+global using Euphorolog.Services.Services;
+global using Euphorolog.UnitTests.Service.ServicesFixtures;
+global using FakeItEasy;
+global using FluentAssertions;

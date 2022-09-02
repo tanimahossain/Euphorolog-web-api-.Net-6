@@ -16,58 +16,58 @@ namespace Euphorolog.Controllers
     public class StoriesController : ControllerBase
     {
         private readonly IStoriesService _storiesService;
-        private readonly IUriService _uriService;
         public StoriesController(
-            IStoriesService storiesService,
-            IUriService UriService
+            IStoriesService storiesService
         )
         {
             _storiesService = storiesService;
-            _uriService = UriService;
         }
+
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<List<GetAllStoriesResponseDTO>>>> GetAllStoriesAsync([FromQuery] PaginationFilter filter)
+        public async Task<IActionResult> GetAllStoriesAsync([FromQuery] PaginationFilter filter)
         {
-            var route = Request.Path.Value;
             var validFilter = new PaginationFilter(filter.pageNumber, filter.pageSize);
-            var pagedData = await _storiesService.GetAllStoriesAsync(filter.pageNumber, filter.pageSize);
+            var pagedData = await _storiesService.GetAllStoriesAsync(validFilter.pageNumber, validFilter.pageSize);
             var totalRecords = await _storiesService.GetTotalStoryCountAsync();
-            var pagedReponse = PaginationHelper.CreatePagedReponse<GetAllStoriesResponseDTO>(pagedData, validFilter, totalRecords, _uriService, route);
+            var pagedReponse = PaginationHelper.CreatePagedReponse<GetStoryResponseDTO>(pagedData, validFilter, totalRecords);
             return Ok(pagedReponse);
         }
+        
         [HttpGet("{id}")]
-        public async Task<ActionResult<StoryResponse<GetStoryByIdResponseDTO>>> GetStoryByIdAsync(string id)
+        public async Task<IActionResult> GetStoryByIdAsync(string id)
         {
             var ret = await _storiesService.GetStoryByIdAsync(id);
-            return Ok(new StoryResponse<GetStoryByIdResponseDTO>(ret));
+            return Ok(new StoryResponse<GetStoryResponseDTO>(ret));
         }
+        
         [HttpPost,Authorize]
-        public async Task<ActionResult<GetStoryByIdResponseDTO>> PostStoryAsync(PostStoryRequestDTO story)
+        public async Task<IActionResult> PostStoryAsync(PostStoryRequestDTO story)
         {
             var ret = await _storiesService.PostStoryAsync(story);
-            return Ok(new StoryResponse<GetStoryByIdResponseDTO>(ret));
+            return Ok(new StoryResponse<GetStoryResponseDTO>(ret));
         }
+        
         [HttpPut("{id}"),Authorize]
-        public async Task<ActionResult<GetStoryByIdResponseDTO>> UpdateStoryAsync([FromRoute] string id, [FromBody] UpdateStoryRequestDTO story)
+        public async Task<IActionResult> UpdateStoryAsync([FromRoute] string id, [FromBody] UpdateStoryRequestDTO story)
         {
             var ret = await _storiesService.UpdateStoryAsync(id, story);
-            return Ok(new StoryResponse<GetStoryByIdResponseDTO>(ret));
+            return Ok(new StoryResponse<GetStoryResponseDTO>(ret));
         }
+        
         [HttpDelete("{id}"),Authorize]
-        public async Task<ActionResult<PagedResponse<List<GetAllStoriesResponseDTO>>>> DeleteStoryAsync(string id)
+        public async Task<IActionResult> DeleteStoryAsync(string id)
         {
             await _storiesService.DeleteStoryAsync(id);
-
-            var route = Request.Path.Value;
             var validFilter = new PaginationFilter(1, 10);
             var pagedData = await _storiesService.GetAllStoriesAsync(1, 10);
             var totalRecords = await _storiesService.GetTotalStoryCountAsync();
-            var pagedReponse = PaginationHelper.CreatePagedReponse<GetAllStoriesResponseDTO>(pagedData, validFilter, totalRecords, _uriService, route);
+            var pagedReponse = PaginationHelper.CreatePagedReponse<GetStoryResponseDTO>(pagedData, validFilter, totalRecords);
             return Ok(pagedReponse);
         }
+        
         /// the only path content negotiation is applied
         [HttpGet("{id}/download")]
-        public async Task<ActionResult<GetStoryByIdResponseDTO>> GetStoryByIdDownloadAsync(string id)
+        public async Task<IActionResult> GetStoryByIdDownloadAsync(string id)
         {
             var ret = await _storiesService.GetStoryByIdAsync(id);
             return Ok(ret);

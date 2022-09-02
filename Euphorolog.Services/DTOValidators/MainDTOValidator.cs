@@ -11,7 +11,7 @@ namespace Euphorolog.Services.DTOValidators
 {
     public class MainDTOValidator<T> : AbstractValidator<T>
     {
-        public void ValidateDTO(T DTO)
+        public virtual void ValidateDTO(T DTO)
         {
             var result = this.Validate(DTO);
             string err = "";
